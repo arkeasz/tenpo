@@ -1,3 +1,5 @@
 .venv
 *.gif
 *.png
+**/node_modules
+**/__pycache__
