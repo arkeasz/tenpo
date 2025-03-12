@@ -40,18 +40,20 @@ with mp_hands.Hands(min_detection_confidence = 0.5, min_tracking_confidence = 0.
 
                     x_cord = int(tip.x * w)
                     y_cord = int(tip.y * h)
+                    z_cord = tip.z
 
                     d.append(x_cord)
                     d.append(y_cord)
+                    d.append(z_cord)
                     fi = (x_cord, y_cord)
                     frame = cv2.circle(frame, (x_cord, y_cord), 5, (0, 255, 0), -1)
 
-                if len(d) == 4: # coords: (x1, y1, x2, y2)
-                    result_distance = math.sqrt((d[0] - d[2])**2 + (d[1] - d[3])**2)
+                if len(d) == 6: # coords: (x1, y1, z1, x2, y2, z2)
+                    result_distance = math.sqrt((d[0] - d[3])**2 + (d[1] - d[4])**2 + (d[2] - d[5])**2)
                     frame = cv2.putText(frame, f"Distancia: {int(result_distance)}", (fi[0] + 10, fi[1] + 10), cv2.FONT_HERSHEY_SIMPLEX, .5, (255, 100, 100), 2)
 
                     thumb_x, thumb_y = d[0], d[1]
-                    index_x, index_y = d[2], d[3]
+                    index_x, index_y = d[3], d[4]
                     frame = cv2.line(frame, (thumb_x, thumb_y), (index_x, index_y), (255, 0, 0), 2)
 
                     if result_distance < CLIC_THRESHOLD:

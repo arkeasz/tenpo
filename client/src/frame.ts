@@ -1,3 +1,7 @@
+
+let app = document.getElementById("app") as HTMLDivElement;
+let res = document.createElement("div") as HTMLDivElement;
+
 async function captureFrame(video: HTMLVideoElement) {
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
@@ -32,15 +36,15 @@ async function captureFrame(video: HTMLVideoElement) {
             }
 
             const result = await response.json();
-            console.log('Respuesta del backend:', result);
 
+            app.appendChild(res);
             if (result.action === 'clic') {
-                console.log('¡Gesto de clic detectado!');
+                res.innerHTML = 'clic'
             } else {
-                console.log('No se detectó ningún gesto.');
+                res.innerHTML = 'none'
             }
         } catch (error) {
-            console.error('Error al enviar la imagen al backend:', error);
+            console.error(error);
         }
     }, 'image/jpeg');
 }
