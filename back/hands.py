@@ -10,15 +10,17 @@ mp_hands = mp.solutions.hands.Hands(
 
 CLIC_THRESHOLD = 30
 
-def detect_hands(frame) -> str:
+def detect_hands(frame):
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = mp_hands.process(rgb_frame)
     action = ''
+    dis = 0
 
     if results.multi_hand_landmarks:
         h, w, _ = frame.shape
         finger_tips = [4, 8]
         points = []
+
 
         for hand_landmarks in results.multi_hand_landmarks:
             for tip_id in finger_tips:
@@ -33,5 +35,6 @@ def detect_hands(frame) -> str:
 
                 if result_distance < CLIC_THRESHOLD:
                     action = 'clic'
+                dis = result_distance
 
-    return action
+    return (action, dis)

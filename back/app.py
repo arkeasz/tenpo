@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 mp_hands = mp.solutions.hands.Hands(
-    static_image_mode=True, 
+    static_image_mode=True,
     max_num_hands=2,
     min_detection_confidence=0.5
 )
@@ -21,12 +21,8 @@ def detect():
             return jsonify({'error': 'No image received'}), 400
 
         file = request.files['image']
-        if file.filename == '':
-            return jsonify({'error': 'No image selected'}), 400
-
-        file = request.files.get('image')
-        if not file:
-            return jsonify({'error': 'No image received'}), 400
+        if not file or file.filename == '':
+            return jsonify({'error': 'No image received or selected'}), 400
 
         image_bytes = file.read()
 
@@ -36,9 +32,12 @@ def detect():
         if frame is None:
             return jsonify({'error': 'Error decoding image'}), 400
 
-        action = detect_hands(frame)
+        action, distance = detect_hands(frame)
 
-        return jsonify({'action': action})
+        return jsonify({
+            'action': action,
+            'distance': distance
+        })
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({'error': str(e)}), 500
