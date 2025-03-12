@@ -7,7 +7,7 @@ const video = document.getElementById("video") as HTMLVideoElement;
 
 function captureLoop() {
   captureFrame(video);
-  setTimeout(captureLoop, 115);
+  setTimeout(captureLoop, 135);
 }
 
 startCamera(video).then(() => {

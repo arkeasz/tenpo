@@ -50,10 +50,17 @@ h1 {
   }
 }
 
-video, canvas {
+video, #canvas {
   width: 10rem;
   height: 10rem;
   position: absolute;
   top: 0;
   left: 1rem;
+  object-fit: contain;
+  visibility: hidden;
+}
+
+#c {
+  background-color: #eee;
+
 }

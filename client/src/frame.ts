@@ -1,26 +1,21 @@
+import { draw } from "./draw";
 
 let app = document.getElementById("app") as HTMLDivElement;
 let res = document.createElement("div") as HTMLDivElement;
 
 async function captureFrame(video: HTMLVideoElement) {
-    const canvas = document.createElement("canvas");
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
     const ctx = canvas.getContext("2d");
 
-    if (!ctx) {
-        console.error("No se pudo obtener el contexto del canvas.");
-        return;
-    }
+    if (!ctx) return;
 
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     canvas.toBlob(async (blob) => {
-        if (!blob) {
-            console.error("No se pudo convertir el canvas a Blob.");
-            return;
-        }
+        if (!blob) return;
 
         const formData = new FormData();
         formData.append('image', blob, 'frame.jpg');
@@ -31,9 +26,7 @@ async function captureFrame(video: HTMLVideoElement) {
                 body: formData,
             });
 
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud: ${response.statusText}`);
-            }
+            if (!response.ok) throw new Error(`Error en la solicitud: ${response.statusText}`);
 
             const result = await response.json();
 
@@ -43,6 +36,8 @@ async function captureFrame(video: HTMLVideoElement) {
             } else {
                 res.innerHTML = 'none'
             }
+            draw(result.distance)
+
         } catch (error) {
             console.error(error);
         }
